@@ -18,26 +18,30 @@ const CountryList: React.FunctionComponent<CountryListProps> = ({
             console.log(countries);
           }, []);
     
-    const goToCountry = (code: string, name: string) => {
-        navigate(`${ROUTER_KEYS.COUNTRY.replace(':name', name)}`, {
-            state: { name, code }
-        });
+    const goToCountry = (name: string, code: string) => {
+        navigate(`${ROUTER_KEYS.COUNTRY.replace(':name', name).replace(':code', code)}`);
     };
 
     return (
         <div className={box}>
-           {!!countries ? (
-                countries.map((country) => (
-                    <CountryListItem key={country.countryCode} 
-                    name={country.name} 
-                    code={country.countryCode} 
-                    onClick={() => goToCountry(country.countryCode, country.name)}/>
-                ))
+            {!!countries && countries.length > 0 ? (
+                countries.map((country) => {
+                    const name = 'name' in country ? country.name : 'officialName' in country ? country.officialName : '';
+                    const code = 'countryCode' in country ? country.countryCode : 'iso2' in country ? country.iso2 : 'iso3' in country ? country.iso3 : '';
+    
+                    return (
+                        <CountryListItem
+                            key={code}
+                            name={name}
+                            code={code}
+                            onClick={() => goToCountry(name, code)}
+                        />
+                    );
+                })
             ) : (
                 <span className={text}>No countries available</span>
             )}
         </div>
-        
     );
 };
 

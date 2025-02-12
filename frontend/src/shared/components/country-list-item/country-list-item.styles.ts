@@ -7,7 +7,7 @@ export const box = css`
     align-items: center;
     height: 50px;
     padding: 10px;
-    border-bottom: 1px solid ${colors.light_gray}
+    border-bottom: 1px solid ${colors.light_blue};
     cursor: pointer;
     &:hover {
         background-color: ${colors.light_blue};

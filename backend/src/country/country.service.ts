@@ -23,9 +23,12 @@ export class CountryService {
 
 	async getCountryInfo(code: string, name: string) {
 		const borders = await this.fetchListOfBorderCountries(code);
-		const population = await this.fetchPopulationOfCountry(name);
-		const flag = await this.fetchFlagUrl(code);
-		const data = { borders, population, flag };
+		const flagData = await this.fetchFlagUrl(code);
+		const population = await this.fetchPopulationOfCountry(
+			flagData.iso3 ?? name,
+		);
+		console.log(flagData, population);
+		const data = { borders, population, flag: flagData.flag ?? '' };
 		return data;
 	}
 
@@ -64,7 +67,7 @@ export class CountryService {
 		}
 	}
 
-	async fetchPopulationOfCountry(name: string): Promise<Population[]> {
+	async fetchPopulationOfCountry(code: string): Promise<Population[]> {
 		try {
 			const response = await firstValueFrom(
 				this.httpService.get<CountryWithPopulationResponse>(
@@ -76,19 +79,21 @@ export class CountryService {
 			const allCountriesPopulation = allCountriesPopulationResponse.data;
 
 			const countryPopulation = allCountriesPopulation.find(
-				(country: CountryWithPopulation) => country.country === name,
+				(country: CountryWithPopulation) => country.iso3 === code,
 			);
 			return countryPopulation ? countryPopulation.populationCounts : [];
 		} catch (error: unknown) {
 			handleError(error, 'fetchPopulationOfCountry');
 			throw new HttpException(
-				`Failed to fetch population data for country: ${name}`,
+				`Failed to fetch population data for country code: ${code}`,
 				HttpStatus.NOT_FOUND,
 			);
 		}
 	}
 
-	async fetchFlagUrl(code: string): Promise<string> {
+	async fetchFlagUrl(
+		code: string,
+	): Promise<{ flag?: string; iso3?: string }> {
 		try {
 			const response = await firstValueFrom(
 				this.httpService.get<CountryWithFlagResponse>(
@@ -103,7 +108,9 @@ export class CountryService {
 				(country: CountryWithFlag) => country.iso2 === code,
 			) as CountryWithFlag;
 
-			return countryWithFlag ? countryWithFlag.flag : '';
+			return countryWithFlag
+				? { flag: countryWithFlag.flag, iso3: countryWithFlag.iso3 }
+				: {};
 		} catch (error: unknown) {
 			handleError(error, 'fetchFlagUrl');
 			throw new HttpException(

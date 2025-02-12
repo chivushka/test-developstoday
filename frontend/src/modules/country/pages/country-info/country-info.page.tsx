@@ -1,45 +1,59 @@
 import * as React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { countryService } from '~modules/country/services/country.service';
 import CountryList from '~shared/components/country-list/country-list.component';
 import { CountryInfo } from '~shared/types/country.types';
-import { box } from './country-info.styles';
+import {
+	box,
+	countryName,
+	headerContainer,
+	img,
+	title,
+} from './country-info.styles';
+import PopulationChart from '~shared/components/population-chart/population-chart.component';
 
 export const CountryInfoPage = (): React.ReactNode => {
-  const [info, setInfo] = React.useState<CountryInfo | null>(); 
-  const location = useLocation();
-  const { additionalData } = location.state || {}; 
+	const [info, setInfo] = React.useState<CountryInfo | null>(null);
+	const [isLoading, setIsLoading] = React.useState<boolean>(true);
+	const { name, code } = useParams<{ name: string; code: string }>();
 
- 
-  React.useEffect(() => {
-	console.log(additionalData);
-    if (additionalData) {
-      const fetchCountryInfo = async () => {
-        try {
-          const response = await countryService.getCountryInfo(additionalData.name, additionalData.code);
-		  console.log(response);
-		  setInfo(response); 
-        } catch (error) {
-          console.error('Failed to fetch country info:', error);
-        }
-      };
-      fetchCountryInfo();
-    }
-  }, []);
-
-	  React.useEffect(() => {
-		console.log(info);
-	  }, [info]);
-	
+	React.useEffect(() => {
+		const fetchCountryInfo = async () => {
+			try {
+				setIsLoading(true);
+				const response = await countryService.getCountryInfo(
+					name,
+					code,
+				);
+				console.log(response);
+				setInfo(response);
+			} catch (error) {
+				console.error('Failed to fetch country info:', error);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+		fetchCountryInfo();
+	}, [name, code]);
 
 	return (
 		<div className={box}>
-			<div>{}</div>
-			{!!info ? (
-        <CountryList countries={info.borders} />
-      ) : (
-        <p>Loading border countries...</p>
-      )}
+			{!isLoading && !!info ? (
+				<>
+					<div className={headerContainer}>
+						<div className={countryName}>{name}</div>
+						{!!info.flag && <img className={img} src={info.flag} alt="" />}
+					</div>
+
+					<div className={title}>Border Countries</div>
+					<CountryList countries={info.borders} />
+
+					<div className={title}>Population Chart</div>
+					<PopulationChart data={info.population}/>
+				</>
+			) : (
+				<p>Loading...</p>
+			)}
 		</div>
 	);
 };

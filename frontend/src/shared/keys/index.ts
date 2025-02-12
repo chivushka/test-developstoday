@@ -1,7 +1,7 @@
 export const enum ROUTER_KEYS {
 	ALL_MATCH = '/*',
 	COUNTRIES = '/',
-	COUNTRY = '/country/:name',
+	COUNTRY = '/country/:name/:code',
 }
 
 export const STORAGE_KEYS = Object.freeze({
