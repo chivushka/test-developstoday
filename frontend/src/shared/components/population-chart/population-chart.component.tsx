@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Population } from '~shared/types/country.types';
-import { box } from './population-chart.styles';
+import { box, text } from './population-chart.styles';
 import { colors } from '~shared/styles';
 import {
     Chart as ChartJS,
@@ -75,7 +75,9 @@ const PopulationChart: React.FunctionComponent<PopulationChartProps> = ({
 
     return (
         <div className={box}>
-            <Line data={chartData} options={options} />
+            {!!data && data.length > 0 ? 
+            (<Line data={chartData} options={options} />) : 
+            <span className={text}>No population data available</span>}
         </div>
         
     );

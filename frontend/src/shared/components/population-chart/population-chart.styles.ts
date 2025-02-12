@@ -6,3 +6,7 @@ export const box = css`
     justify-content: center;
     align-items: center;
 `;
+
+export const text = css`
+    font-size: 16px;
+`;
