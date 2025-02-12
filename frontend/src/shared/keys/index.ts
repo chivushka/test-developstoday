@@ -4,11 +4,6 @@ export const enum ROUTER_KEYS {
 	COUNTRY = '/country/:name/:code',
 }
 
-export const STORAGE_KEYS = Object.freeze({
-	ACCESS_TOKEN: 'ACCESS_TOKEN',
-	REFRESH_TOKEN: 'REFRESH_TOKEN',
-});
+export const STORAGE_KEYS = Object.freeze({});
 
-export const QUERY_KEYS = Object.freeze({
-	AUTH: 'AUTH',
-});
+export const QUERY_KEYS = Object.freeze({});

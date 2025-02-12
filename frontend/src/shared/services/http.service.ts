@@ -1,8 +1,6 @@
 import type { IHttpClient } from './types';
 import type { IHttpConfig, IMap, IResponse } from './types';
 
-// const QUERY_LINK_OFFSET = 0;
-
 const SERVER_URL = import.meta.env.VITE_BACKEND_URL ?? '';
 
 export class HttpService {

@@ -17,20 +17,19 @@ export const AllCountriesPage = (): React.ReactNode => {
 			}
 		};
 		fetchAllCountries();
-	  }, []);
+	}, []);
 
-	  React.useEffect(() => {
+	React.useEffect(() => {
 		console.log(countries);
-	  }, [countries]);
-	
+	}, [countries]);
 
 	return (
 		<div className={box}>
 			{!!countries ? (
-        <CountryList countries={countries} />
-      ) : (
-        <p>Loading countries...</p>
-      )}
+				<CountryList countries={countries} />
+			) : (
+				<p>Loading countries...</p>
+			)}
 		</div>
 	);
 };

@@ -14,11 +14,9 @@ const queryClient = new QueryClient({
 });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<QueryClientProvider client={queryClient}>
-			<BrowserRouter>
-				<div className="custom-root">
-					<App />
-				</div>
-			</BrowserRouter>
-	</QueryClientProvider>,
+		<BrowserRouter>
+			<div className="custom-root">
+				<App />
+			</div>
+		</BrowserRouter>,
 );

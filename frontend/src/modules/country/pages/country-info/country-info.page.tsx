@@ -42,14 +42,16 @@ export const CountryInfoPage = (): React.ReactNode => {
 				<>
 					<div className={headerContainer}>
 						<div className={countryName}>{name}</div>
-						{!!info.flag && <img className={img} src={info.flag} alt="" />}
+						{!!info.flag && (
+							<img className={img} src={info.flag} alt="" />
+						)}
 					</div>
 
 					<div className={title}>Border Countries</div>
 					<CountryList countries={info.borders} />
 
 					<div className={title}>Population Chart</div>
-					<PopulationChart data={info.population}/>
+					<PopulationChart data={info.population} />
 				</>
 			) : (
 				<p>Loading...</p>

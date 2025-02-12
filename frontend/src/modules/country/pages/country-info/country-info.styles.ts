@@ -2,7 +2,7 @@ import { css } from '@emotion/css';
 
 export const box = css`
 	display: flex;
-	flex:1;
+	flex: 1;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
@@ -30,7 +30,5 @@ export const img = css`
 `;
 
 export const title = css`
-	font-size: 20px
+	font-size: 20px;
 `;
-
-

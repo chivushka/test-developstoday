@@ -11,7 +11,7 @@ mainAxios.interceptors.response.use(
 	},
 	async (error) => {
 		if (Boolean(error.response) && error.response.status === 401) {
-			// setAuth(false);
+			// implementation
 		}
 		return Promise.reject(error);
 	},
