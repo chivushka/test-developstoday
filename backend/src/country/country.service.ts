@@ -12,10 +12,45 @@ import {
 	Population,
 } from './types/country.types';
 import { handleError } from 'src/common/utils/error-handler';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CountryService {
-	constructor(private readonly httpService: HttpService) {}
+	private countriesApiUrl: string;
+	private borderCountriesApiUrl: string;
+	private populationCountriesApiUrl: string;
+	private flagCountriesApiUrl: string;
+
+	constructor(
+		private readonly httpService: HttpService,
+		private config: ConfigService,
+	) {
+		const countriesApiUrl = this.config.get<string>('COUNTRIES_API_URL');
+		const borderCountriesApiUrl = this.config.get<string>(
+			'BORDER_COUNTRIES_API_URL',
+		);
+		const populationCountriesApiUrl = this.config.get<string>(
+			'POPULATION_COUNTRIES_API_URL',
+		);
+		const flagCountriesApiUrl = this.config.get<string>(
+			'FLAG_COUNTRIES_API_URL',
+		);
+
+		if (
+			!countriesApiUrl ||
+			!borderCountriesApiUrl ||
+			!populationCountriesApiUrl ||
+			!flagCountriesApiUrl
+		) {
+			throw new Error(
+				'Required environment variables for any countries API are missing.',
+			);
+		}
+		this.countriesApiUrl = countriesApiUrl;
+		this.borderCountriesApiUrl = borderCountriesApiUrl;
+		this.populationCountriesApiUrl = populationCountriesApiUrl;
+		this.flagCountriesApiUrl = flagCountriesApiUrl;
+	}
 
 	getAvailableCountries() {
 		return this.fetchCountries();
@@ -35,9 +70,7 @@ export class CountryService {
 	async fetchCountries(): Promise<ListCountry[]> {
 		try {
 			const response = await firstValueFrom(
-				this.httpService.get<ListCountry[]>(
-					'https://date.nager.at/api/v3/AvailableCountries',
-				),
+				this.httpService.get<ListCountry[]>(this.countriesApiUrl),
 			);
 			return response.data;
 		} catch (error: unknown) {
@@ -53,7 +86,7 @@ export class CountryService {
 		try {
 			const response = await firstValueFrom(
 				this.httpService.get<CountryWithBorderCountriesResponse>(
-					`https://date.nager.at/api/v3/CountryInfo/${code}`,
+					this.borderCountriesApiUrl + `/${code}`,
 				),
 			);
 			const borders = response.data?.borders || [];
@@ -71,7 +104,7 @@ export class CountryService {
 		try {
 			const response = await firstValueFrom(
 				this.httpService.get<CountryWithPopulationResponse>(
-					'https://countriesnow.space/api/v0.1/countries/population',
+					this.populationCountriesApiUrl,
 				),
 			);
 
@@ -97,7 +130,7 @@ export class CountryService {
 		try {
 			const response = await firstValueFrom(
 				this.httpService.get<CountryWithFlagResponse>(
-					'https://countriesnow.space/api/v0.1/countries/flag/images',
+					this.flagCountriesApiUrl,
 				),
 			);
 
