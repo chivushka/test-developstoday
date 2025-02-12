@@ -1,0 +1,42 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "target": "ESNext",
+        "module": "ESNext",
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
+        "jsx": "react-jsx",
+        "moduleResolution": "node",
+        "paths": {
+            "~assets/*": [
+                "src/assets/*"
+            ],
+            "~modules/*": [
+                "src/modules/*"
+            ],
+            "~router/*": [
+                "src/router/*"
+            ],
+            "~shared/*": [
+                "src/shared/*"
+            ],
+            "~store/*": [
+                "src/store/*"
+            ],
+            "~typings/*": [
+                "src/typings/*"
+            ],
+            "~/*": [
+                "src/*"
+            ],
+            "~types/*": [
+                "src/types/*"
+            ],
+            "~stores/*": [
+                "src/shared/stores/*"
+            ]
+        }
+    }
+}
